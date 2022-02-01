@@ -18,3 +18,17 @@ function clickCounter() {
     console.log(`clicked ${ij} times`);
 }
 
+
+// function changes object referenced by its argument
+
+const Array111 = ['stable', 'new', 'another one', 'one more', 'the last element'];
+
+function changeArray(arr) {
+  arr[0] = 'changed';
+}
+
+changeArray(Array111); //function changes Array111
+
+console.table(Array111);
+
+//---------------------------------------------------
