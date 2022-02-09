@@ -32,3 +32,17 @@ changeArray(Array111); //function changes Array111
 console.table(Array111);
 
 //---------------------------------------------------
+
+console.log('array push and unshift');
+
+
+const arr22 = [22, 2225];
+const arr225 = [55, 255, 'mmc', 'cf', 'sd'];
+const arr55555 = [5, 55, 555, 5555, 55555];
+
+arr22.push(...arr225);
+
+console.log('new arr22 length', arr22.unshift(...arr55555));
+console.table(arr22);
+
+//---------------------------------------------------
