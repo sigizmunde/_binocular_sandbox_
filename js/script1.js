@@ -32,3 +32,10 @@ changeArray(Array111); //function changes Array111
 console.table(Array111);
 
 //---------------------------------------------------
+
+const arraySlice = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+console.table([...arraySlice.slice(5, arraySlice.length), ...arraySlice.slice(0, 5)]);
+console.log("Here it is ^");
+
+//---------------------------------------------------
