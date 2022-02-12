@@ -33,6 +33,20 @@ console.table(Array111);
 
 //---------------------------------------------------
 
+console.log('array push and unshift');
+
+
+const arr22 = [22, 2225];
+const arr225 = [55, 255, 'mmc', 'cf', 'sd'];
+const arr55555 = [5, 55, 555, 5555, 55555];
+
+arr22.push(...arr225);
+
+console.log('new arr22 length', arr22.unshift(...arr55555));
+console.table(arr22);
+
+//---------------------------------------------------
+
 const arraySlice = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 console.table([...arraySlice.slice(5, arraySlice.length), ...arraySlice.slice(0, 5)]);
