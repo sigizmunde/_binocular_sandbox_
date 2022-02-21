@@ -54,45 +54,73 @@
 
 // //---------------------------------------------------
 
-const products = [ {
-  id : 'sku1',
-  qty: 1,
-}, {
-  id : 'sku2',
-  qty: 2,
-}, {
-  id : 'sku3',
-  qty: 3,
-}, {
-  id : 'sku1',
-  qty: 6,
-}, {
-  id : 'sku1',
-  qty: 8,
-}, {
-  id : 'sku2',
-  qty: 19,
-}, {
-  id : 'sku4',
-  qty: 1,
-} ]
+// const products = [ {
+//   id : 'sku1',
+//   qty: 1,
+// }, {
+//   id : 'sku2',
+//   qty: 2,
+// }, {
+//   id : 'sku3',
+//   qty: 3,
+// }, {
+//   id : 'sku1',
+//   qty: 6,
+// }, {
+//   id : 'sku1',
+//   qty: 8,
+// }, {
+//   id : 'sku2',
+//   qty: 19,
+// }, {
+//   id : 'sku4',
+//   qty: 1,
+// } ]
 
-//Потрібно перебрати масив і якщо він має об'єкти в яких дублюються айді то квонтіті цих елементів потрібно сплюсувати а той обє'кт який співпав видалити з масиву.
-//(Потрібно мутувати даний масив, створювати новий не потрібно)
+// //Потрібно перебрати масив і якщо він має об'єкти в яких дублюються айді то квонтіті цих елементів потрібно сплюсувати а той обє'кт який співпав видалити з масиву.
+// //(Потрібно мутувати даний масив, створювати новий не потрібно)
 
-function reduceDoubling(arr) {
-  for (let i=0; i < arr.length; i++) {
-    for (let j = i+1; j < arr.length; j++) {
-      if (arr[i].id === arr[j].id) {
-        arr[i].qty += arr[j].qty;
-        arr.splice(j, 1);
-        j--;
-      }
-    }
+// function reduceDoubling(arr) {
+//   for (let i=0; i < arr.length; i++) {
+//     for (let j = i+1; j < arr.length; j++) {
+//       if (arr[i].id === arr[j].id) {
+//         arr[i].qty += arr[j].qty;
+//         arr.splice(j, 1);
+//         j--;
+//       }
+//     }
+//   }
+// }
+
+// reduceDoubling(products);
+// console.log(products);
+
+// //-----------------------------------------------------------
+
+const heapSort = (array) => {
+  // forming a tree
+  for (let i = Math.floor(array.length - 2); i >= 0; i -= 1) {
+    if (array[i] <= array[i + 2]) {
+      const temp = array[i];
+      array[i] = array[i + 2];
+      array[i + 2] = temp;
+    } 
+     console.log(array.join(', '));
+    if (array[i] <= array[i + 1]) {
+      const temp = array[i];
+      array[i] = array[i + 1];
+      array[i + 1] = temp;
+    } 
+     console.log(array.join(', '));
   }
+
+  const first = array[0];
+  array[0] = array[array.length - 1];
+  array[array.length - 1] = first;
+
+  return array.length > 1 ? [...heapSort(array.slice(0, array.length - 1)), array[array.length - 1]] : array;
 }
 
-reduceDoubling(products);
-console.log(products);
-
-//-----------------------------------------------------------
+const inputArray = [23, 1, 34, 15, 165, 312, 59, 12, 1023, 22];
+console.log(inputArray);
+console.log(heapSort(inputArray));
