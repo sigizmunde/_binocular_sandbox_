@@ -124,3 +124,13 @@ const heapSort = (array) => {
 const inputArray = [23, 1, 34, 15, 165, 312, 59, 12, 1023, 22];
 console.log(inputArray);
 console.log(heapSort(inputArray));
+
+//====================================================================
+
+setTimeout(a => { console.log("A") }, 0);
+
+const prom1 = new Promise(resolve => resolve("success value"));
+prom1.then(value => console.log(value));
+//promise is a microtask would log first, then timed out function executes
+
+//====================================================================
