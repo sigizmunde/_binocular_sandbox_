@@ -18,7 +18,6 @@
 //     console.log(`clicked ${ij} times`);
 // }
 
-
 // // function changes object referenced by its argument
 
 // const Array111 = ['stable', 'new', 'another one', 'one more', 'the last element'];
@@ -34,7 +33,6 @@
 // //---------------------------------------------------
 
 // console.log('array push and unshift');
-
 
 // const arr22 = [22, 2225];
 // const arr225 = [55, 255, 'mmc', 'cf', 'sd'];
@@ -97,29 +95,31 @@
 
 // //-----------------------------------------------------------
 
-const heapSort = (array) => {
+const heapSort = array => {
   // forming a tree
   for (let i = Math.floor(array.length - 2); i >= 0; i -= 1) {
     if (array[i] <= array[i + 2]) {
       const temp = array[i];
       array[i] = array[i + 2];
       array[i + 2] = temp;
-    } 
-     console.log(array.join(', '));
+    }
+    console.log(array.join(', '));
     if (array[i] <= array[i + 1]) {
       const temp = array[i];
       array[i] = array[i + 1];
       array[i + 1] = temp;
-    } 
-     console.log(array.join(', '));
+    }
+    console.log(array.join(', '));
   }
 
   const first = array[0];
   array[0] = array[array.length - 1];
   array[array.length - 1] = first;
 
-  return array.length > 1 ? [...heapSort(array.slice(0, array.length - 1)), array[array.length - 1]] : array;
-}
+  return array.length > 1
+    ? [...heapSort(array.slice(0, array.length - 1)), array[array.length - 1]]
+    : array;
+};
 
 const inputArray = [23, 1, 34, 15, 165, 312, 59, 12, 1023, 22];
 console.log(inputArray);
@@ -127,9 +127,11 @@ console.log(heapSort(inputArray));
 
 //====================================================================
 
-setTimeout(a => { console.log("A") }, 0);
+setTimeout(a => {
+  console.log('A');
+}, 0);
 
-const prom1 = new Promise(resolve => resolve("success value"));
+const prom1 = new Promise(resolve => resolve('success value'));
 prom1.then(value => console.log(value));
 //promise is a microtask would log first, then timed out function executes
 

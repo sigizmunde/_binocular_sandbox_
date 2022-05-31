@@ -1,0 +1,31 @@
+{
+  "name": "binocular_sandbox",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "https://sigizmunde.github.io/_binocular_sandbox_",
+  "scripts": {
+    "dev": "parcel src/*.html",
+    "build": "parcel build src/*.html --public-url /_binocular_sandbox_/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sigizmundey/_binocular_sandbox_.git"
+  },
+  "keywords": [],
+  "author": "Illya Bondar <illya.bondar.ukraine@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sigizmunde/_binocular_sandbox_/issues"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "parcel-plugin-handlebars-precompile": "^1.0.2",
+    "parcel-plugin-nuke-dist": "^1.0.1",
+    "posthtml-include": "^1.6.2",
+    "sass": "^1.32.8"
+  },
+  "dependencies": {
+    "firebase": "^9.8.2"
+  }
+}
