@@ -13,12 +13,12 @@ imgInput.addEventListener('change', function (e) {
         virtualCanvas.width = myImage.width; // Assigns image's width to canvas
         virtualCanvas.height = myImage.height; // Assigns image's height to canvas
         virtualContext.drawImage(myImage, 0, 0); // Draws the image on canvas
-        let imgData = virtualCanvas.toDataURL('image/jpeg', 0.75); // Assigns image base64 string in jpeg format to a variable
+        // let imgData = virtualCanvas.toDataURL('image/jpeg', 0.75); // Assigns image base64 string in jpeg format to a variable
 
         let myCanvas = document.getElementById('myCanvas'); // Creates a canvas object
-        let myContext = myCanvas.getContext('2d'); // Creates a contect object
+        // let myContext = myCanvas.getContext('2d'); // Creates a contect object
         // myContext.drawImage(newImage, 0, 0); // Draws the image on canvas
-        resizeImage(virtualCanvas, myCanvas, 500);
+        resizeImage(virtualCanvas, myCanvas, 20);
       };
     };
   }
@@ -38,28 +38,31 @@ function resizeImage(canvas, newCanvas, newWidth) {
   console.log('new dimensions = ', newWidth, 'x', newHeight);
   // 2. Read block by coords
   const newData = new ImageData(newWidth, newHeight);
-  const data = newData.data;
+  const { data } = newData;
   for (let i = 0; i < newWidth; i += 1) {
     for (let j = 0; j < newHeight; j += 1) {
-      for (let x = i * blockWidth; x < i * blockWidth + blockWidth; x += 1) {
-        for (let y = j * blockWidth; y < j * blockWidth + blockWidth; y += 1) {
+      const averageColor = [0, 0, 0, 0];
+      for (let x = i * blockWidth; x < (i + 1) * blockWidth; x += 1) {
+        for (let y = j * blockWidth; y < (j + 1) * blockWidth; y += 1) {
           const pixel = getPixelColors(x, y, imageData);
           // 3. Count average color of block}
           let component = 0;
           while (component < 4) {
-            // data[i + j * newWidth + component] += Math.floor(
-            //   pixel[component] / (blockWidth * blockWidth),
-            // );
-            data[i + j * newWidth + component] = pixel[component];
+            averageColor[component] += pixel[component] / blockWidth ** 2;
             component += 1;
           }
         }
       }
+      let component = 0;
+      while (component < 4) {
+        data[i * 4 + j * newWidth * 4 + component] = Math.round(averageColor[component]);
+        component += 1;
+      }
     }
   }
+
   console.log(newData);
-  // 4. Write blocks of fixed size in a new image
-  // 5. Return image
+  // 4. Draw image
   newCanvas.width = newWidth;
   newCanvas.height = newHeight;
   newCanvasContext.putImageData(newData, 0, 0);
