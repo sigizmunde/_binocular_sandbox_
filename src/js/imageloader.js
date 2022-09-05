@@ -18,7 +18,7 @@ imgInput.addEventListener('change', function (e) {
         let myCanvas = document.getElementById('myCanvas'); // Creates a canvas object
         // let myContext = myCanvas.getContext('2d'); // Creates a contect object
         // myContext.drawImage(newImage, 0, 0); // Draws the image on canvas
-        resizeImage(virtualCanvas, myCanvas, 20);
+        resizeImage(virtualCanvas, myCanvas, 90);
       };
     };
   }
@@ -60,12 +60,17 @@ function resizeImage(canvas, newCanvas, newWidth) {
       }
     }
   }
-
   console.log(newData);
   // 4. Draw image
-  newCanvas.width = newWidth;
-  newCanvas.height = newHeight;
+  newCanvas.width = newWidth * 2;
+  newCanvas.height = newHeight * 2;
   newCanvasContext.putImageData(newData, 0, 0);
+  grayscale(data);
+  newCanvasContext.putImageData(newData, newWidth, 0);
+  contrast(data, 2.5);
+  newCanvasContext.putImageData(newData, 0, newHeight);
+  levels(data);
+  newCanvasContext.putImageData(newData, newWidth, newHeight);
 }
 
 function getPixelColors(x, y, imageData) {
@@ -75,4 +80,49 @@ function getPixelColors(x, y, imageData) {
   const blue = imageData.data[coordR + 2];
   const alpha = imageData.data[coordR + 3];
   return [red, green, blue, alpha];
+}
+
+function grayscale(data) {
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+    const alpha = data[i + 3];
+    const avgNonTransparent = (avg * alpha) / 255 + 255 - alpha;
+    data[i] = avgNonTransparent; // red
+    data[i + 1] = avgNonTransparent; // green
+    data[i + 2] = avgNonTransparent; // blue
+    data[i + 3] = 255; // alpha
+  }
+}
+
+function contrast(data, coef = 1) {
+  let max = data.reduce((acc, val, idx) => ((idx + 1) % 4 ? (val > acc ? val : acc) : acc), 0);
+  let min = data.reduce((acc, val, idx) => ((idx + 1) % 4 ? (val < acc ? val : acc) : acc), 255);
+  console.log('min = ', min, ', max = ', max, ', coef = ', coef);
+  min = Math.round(min * coef);
+  max = Math.round(255 - (255 - max) * coef);
+  min = min > 47 ? 47 : min;
+  max = max < 160 ? 160 : max;
+  console.log('min = ', min, ', max = ', max);
+  if (min === max || (min === 0 && max === 255)) return;
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    let contr = Math.round((avg - min) * (255 / (max - min)));
+    contr = contr > 255 ? 255 : contr;
+    data[i] = contr; // red
+    data[i + 1] = contr; // green
+    data[i + 2] = contr; // blue
+  }
+}
+
+function levels(data, mapArray = [63, 127, 191, 255]) {
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+    let brickColor = 0;
+    mapArray.forEach(el => {
+      if (avg >= el - 16 && el > brickColor) brickColor = el;
+    });
+    data[i] = brickColor; // red
+    data[i + 1] = brickColor; // green
+    data[i + 2] = brickColor; // blue
+  }
 }
