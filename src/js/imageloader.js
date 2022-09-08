@@ -71,6 +71,10 @@ function resizeImage(canvas, newCanvas, newWidth) {
   newCanvasContext.putImageData(newData, 0, newHeight);
   levels(data);
   newCanvasContext.putImageData(newData, newWidth, newHeight);
+
+  const brickCanvas = document.querySelector('#brickCanvas');
+  const bricks = mapDataToBricks(data, newWidth);
+  showBricks(bricks, brickCanvas);
 }
 
 function getPixelColors(x, y, imageData) {
@@ -125,4 +129,39 @@ function levels(data, mapArray = [63, 127, 191, 255]) {
     data[i + 1] = brickColor; // green
     data[i + 2] = brickColor; // blue
   }
+}
+
+const defaultMappingTemplate = [
+  { id: 0, border: 0 },
+  { id: 1, border: 47 },
+  { id: 2, border: 111 },
+  { id: 3, border: 175 },
+  { id: 4, border: 239 },
+];
+
+function mapDataToBricks(data, width, mappingTemplate = defaultMappingTemplate) {
+  const mappedData = { data: [], width, mapping: mappingTemplate }; // output format
+  for (let i = 0; i * 4 < data.length; i += 1) {
+    const avg = Math.round((data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2]) / 3);
+    let brickIndex = 0;
+    mappingTemplate.forEach(el => {
+      if (avg >= el.border && el.id > brickIndex) brickIndex = el.id;
+    });
+    mappedData.data[i] = brickIndex;
+  }
+  return mappedData;
+}
+
+function showBricks({ data, width, mapping }, canvas, brickSize = 16) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = width * brickSize;
+  canvas.height = (data.length / width) * brickSize;
+  data.map((val, idx) => {
+    const grayColor = mapping.find(el => el.id === val)?.border || 0;
+    const channel = grayColor.toString(16).padStart(2, '0');
+    ctx.fillStyle = '#' + channel + channel + channel;
+    const raw = idx % width;
+    const column = Math.floor(idx / width);
+    ctx.fillRect(raw * brickSize, column * brickSize, brickSize - 1, brickSize - 1);
+  });
 }

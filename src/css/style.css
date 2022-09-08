@@ -12,7 +12,7 @@
 }
 
 #myCanvas {
-  transform: scale(500%) translateY(50%);
+  /* transform: scale(500%) translateY(50%); */
   image-rendering: optimizeSpeed;
   /* Older versions of FF          */
   image-rendering: -moz-crisp-edges;
