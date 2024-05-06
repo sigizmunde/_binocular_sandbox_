@@ -26,3 +26,9 @@
   -ms-interpolation-mode: nearest-neighbor;
   /* IE                            */
 }
+
+.sound-speed {
+  width: 100%;
+  text-align: center;
+  padding: 12vh 32px;
+}
