@@ -1,14 +1,18 @@
 <div>
-    <input type="range" id="rpmSlider" min="1000" max="8000" value="1000" step="100">
+    <input type="range" id="rpmSlider" min="1000" max="8000" value="1000" step="250">
     <button type="'button" id="start-button">Start</button>
+    <button type="'button" id="stop-button">Stop</button>
     <script>
         window.onload = function() {
             const audioContext = new AudioContext();
             let source = null;
             const rpmSlider = document.getElementById('rpmSlider');
+            const startButton = document.querySelector('#start-button');
+            const stopButton = document.querySelector('#stop-button');
 
             // Fetch the audio file and create a buffer source
-            fetch('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg')
+            function refetchAndSet() {
+                fetch('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg')
                 .then(response => response.arrayBuffer())
                 .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
                 .then(audioBuffer => {
@@ -16,10 +20,32 @@
                     source.buffer = audioBuffer;
                     source.loop = true;
                     source.connect(audioContext.destination);
-                    const startButton = document.querySelector('#start-button');
-                    startButton.addEventListener('click', () => source.start(0));
+
+                    function startEventListener() {
+                        source.start(0);
+
+                        //remove listener after it is dispatched
+                        this.removeEventListener('click', startEventListener);
+                    };
+
+                    function stopEventListener() {
+                        source.stop();
+
+                        //remove listener after it is dispatched
+                        this.removeEventListener('click', stopEventListener);
+                        
+                        // create a new audio context with the recursive call
+                        refetchAndSet();
+                    };
+
+                    startButton.addEventListener('click', startEventListener);
+                    stopButton.addEventListener('click', stopEventListener);
                     updatePlaybackRate();
                 });
+            }
+
+            // initial function call
+            refetchAndSet();
 
             // Function to update the playback rate based on the slider
             function updatePlaybackRate() {
