@@ -1,0 +1,42 @@
+<div>
+    <input type="range" id="rpmSlider" min="1000" max="8000" value="1000" step="100">
+    <button type="'button" id="start-button">Start</button>
+    <script>
+        window.onload = function() {
+            const audioContext = new AudioContext();
+            let source = null;
+            const rpmSlider = document.getElementById('rpmSlider');
+
+            // Fetch the audio file and create a buffer source
+            fetch('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg')
+                .then(response => response.arrayBuffer())
+                .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+                .then(audioBuffer => {
+                    source = audioContext.createBufferSource();
+                    source.buffer = audioBuffer;
+                    source.loop = true;
+                    source.connect(audioContext.destination);
+                    const startButton = document.querySelector('#start-button');
+                    startButton.addEventListener('click', () => source.start(0));
+                    updatePlaybackRate();
+                });
+
+            // Function to update the playback rate based on the slider
+            function updatePlaybackRate() {
+                if (source) {
+                    const minRPM = 1000;
+                    const maxRPM = 8000;
+                    const minRate = 0.5; // Play at half speed for 1000 RPM
+                    const maxRate = 4.0; // Play at quadruple speed for 8000 RPM
+
+                    // Map the slider value to a playback rate
+                    const playbackRate = minRate + (maxRate - minRate) * ((rpmSlider.value - minRPM) / (maxRPM - minRPM));
+                    source.playbackRate.value = playbackRate;
+                }
+            }
+
+            // Update playback rate whenever the slider value changes
+            rpmSlider.addEventListener('input', updatePlaybackRate);
+        };
+    </script>
+</div>
