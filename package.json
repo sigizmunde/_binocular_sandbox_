@@ -26,6 +26,6 @@
     "sass": "^1.32.8"
   },
   "dependencies": {
-    "firebase": "^9.8.2"
+    "firebase": "^9.23.0"
   }
 }
